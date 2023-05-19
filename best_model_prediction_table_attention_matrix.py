@@ -2,7 +2,7 @@ import torch
 import numpy as np
 from encoder_decoder import encoder,decoder,attention_decoder
 from data_loader_vocab_builder import *
-from train import compute_loss_accuracy
+from main import compute_loss_accuracy
 import plotly.express as px
 import plotly.graph_objects as go
 from plotly.subplots import make_subplots
