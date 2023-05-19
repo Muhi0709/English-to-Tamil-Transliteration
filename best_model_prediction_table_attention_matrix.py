@@ -51,7 +51,7 @@ best_dec_attn.eval()
 
 def predictions(enc,dec,test_data,max_length_test_x,lat_dict_idx2word,lat_dict_word2idx,dev_dict_idx2word,
                 dev_dict_word2idx,ignore_accuracy = False,
-                beam_search=0,wandb_log_table= False):
+                wandb_log_table= False):
     
     N=len(test_data)
     predicted_words_list=[]   #predicted(dev)
@@ -60,10 +60,10 @@ def predictions(enc,dec,test_data,max_length_test_x,lat_dict_idx2word,lat_dict_w
 
     if not ignore_accuracy:  #compute accuracy and the predicted word indices
         acc,predicted_words = compute_loss_accuracy(test_data[:,:max_length_test_x],test_data[:,max_length_test_x:-2],enc,dec,
-                                                         test_data[:,-2],test_data[:,-1],dev_dict_word2idx,testing=True,beam_search=beam_search)
+                                                         test_data[:,-2],test_data[:,-1],dev_dict_word2idx,testing=True)
     else:
         _,predicted_words = compute_loss_accuracy(test_data[:,:max_length_test_x],test_data[:,max_length_test_x:-2],enc,dec,
-                                                    test_data[:,-2],test_data[:,-1],dev_dict_word2idx,testing=True,beam_search=beam_search)
+                                                    test_data[:,-2],test_data[:,-1],dev_dict_word2idx,testing=True)
     
     actual_words = test_data[:,max_length_test_x:-2]
     input_words = test_data[:,:max_length_test_x]
@@ -211,9 +211,9 @@ def attention_heatmap(enc,dec,test_data,max_length_test_x,dev_script_word2idx,de
 
 with torch.no_grad(): #calling predictions() for csv file, test acc calc and logging the prediction table 
     _,test_acc1=predictions(best_enc_no_attn,best_dec_no_attn,test_data,max_length_test_x,latin_script_idx2word,latin_script_word2idx,
-                           dev_script_idx2word,dev_script_word2idx,ignore_accuracy=False,beam_search=0,wandb_log_table=True)
+                           dev_script_idx2word,dev_script_word2idx,ignore_accuracy=False,wandb_log_table=True)
     _,test_acc2=predictions(best_enc_attn,best_dec_attn,test_data,max_length_test_x,latin_script_idx2word,latin_script_word2idx,
-                           dev_script_idx2word,dev_script_word2idx,ignore_accuracy=False,beam_search=0,wandb_log_table=True)
+                           dev_script_idx2word,dev_script_word2idx,ignore_accuracy=False,wandb_log_table=True)
 print("-"*200)
 print("=>Test Accuracy(no_atten_mechanism): {}".format(test_acc1))
 print("-"*200)
