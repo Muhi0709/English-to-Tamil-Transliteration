@@ -35,7 +35,19 @@ ii) Encoder Network:
 
   i) wandb sweep experiments: hyperparameter_tuning1,hyperparameter_tuning2 and hyperparameter_tuning3
   
-  ii) The hyperparameter sweeps were run in kaggle with aksharantar dataset added as data source,encoder_decoder.py,data_loader_vocab_builder.py and main.py added as utility scripts for the kaggle notebook.
+  ii) The hyperparameter sweeps were run in kaggle with aksharantar dataset added as data source,encoder_decoder.py,data_loader_vocab_builder.py and main.py added as utility scripts for the kaggle notebook and the models were saved in '/kaggle/working/'
+  
+  * best_model_prediction_table_attention_matrix.py:
+  
+  i) Wandb runs for logging the prediction table for best models-without attention mechanism and with attention mechanism.
+  
+  ii) Wandb run for logging the attention heatmap for the best model with attention mechanism.
+  
+  iii) The runs were run as Kaggle notebook.
+  
+  iii) The best models saved in kaggle (during hyperparameter_tuning sweep) are added as datasource for the kaggle notebook.
+  
+  iv) The csv prediction files(predictions vanilla and predictions attention) are saved in '/kaggle/working'.
 
  * train.py: (Tamil dataset)
 
@@ -46,6 +58,13 @@ ii) Encoder Network:
   iii) Commandline arguments are parsed using "argparse" module.
   
   iv) Type: python train.py --help in the terminal to get info about the commandline arguments. The default values of the arguments are set to the best configuration for the optimizer and model(attention mechanism) obtained from the sweep experiments.
+  
+* Output Folders:
+i) predictions_vanilla - contains the prediction_vanilla.csv file obtained from the best model without attention mechanism.
+
+ii) predictions_attention - contains the prediction_attention.csv file obtained from the best model with attention mechanism.
+
+
   
 
   
