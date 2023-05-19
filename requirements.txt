@@ -1,0 +1,1 @@
+for running train.py, add aksharantar_sampled folder to the working directory of the script.
