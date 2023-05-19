@@ -34,14 +34,18 @@ ii) Encoder Network:
  * hyperarameter_tuning.py:
 
   i) wandb sweep experiments: hyperparameter_tuning1,hyperparameter_tuning2 and hyperparameter_tuning3
+  
   ii) The hyperparameter sweeps were run in kaggle with aksharantar dataset added as data source,encoder_decoder.py,data_loader_vocab_builder.py and main.py added as utility scripts for the kaggle notebook.
 
  * train.py: (Tamil dataset)
 
   i) Python script to train encoder-decoder seq2seq model with training data and test the model on the test dataset from the terminal/command prompt.
+  
   ii) Imports from data_loader_vocab_builder.py, encoder_decoder.py and main.py
-  ii) Commandline arguments are parsed using "argparse" module.
-  iii) Type: python train.py --help in the terminal to get info about the commandline arguments. The default values of the arguments are set to the best configuration for the optimizer and model obtained from sweep configuration.
+  
+  iii) Commandline arguments are parsed using "argparse" module.
+  
+  iv) Type: python train.py --help in the terminal to get info about the commandline arguments. The default values of the arguments are set to the best configuration for the optimizer and model obtained from sweep configuration.
   
 
   
