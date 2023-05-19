@@ -1,4 +1,4 @@
-# cs6910_assignment_3
+### cs6910_assignment_3
 
 * data_loader_vocab_builder.py : 
 
@@ -63,6 +63,8 @@ ii) Encoder Network:
 i) predictions_vanilla - contains the prediction_vanilla.csv file obtained from the best model without attention mechanism.
 
 ii) predictions_attention - contains the prediction_attention.csv file obtained from the best model with attention mechanism.
+
+iii) best_models - contains the best encoder & decoder model with no attention mechanism and the best encoder & decoder model with attention mechanism.
 
 
   
