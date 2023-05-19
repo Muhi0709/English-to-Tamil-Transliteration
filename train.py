@@ -15,12 +15,12 @@ parser.add_argument('-l','--loss',default="cross_entropy",choices=["cross_entrop
                     help="""Loss function used to train the neural network.Only supported choice is 'cross_entropy'.Default set to 'cross_entropy'""")
 parser.add_argument('-o','--optimizer',default="Adam",choices=["SGD","Nesterov","Adamax","RMSprop","NAdam","Adam"],help="""Optimizer used for training.Supported choices are 'SGD','Nesterov',
 'Adamax','RMSprop','Adam','NAdam'.Default set to 'Adam'""")
-parser.add_argument('-lr','--learning_rate',default=0.002,type=float,help="Learning rate used to optimize model parameters.Supported type 'float'.Default set to 0.00025")
+parser.add_argument('-lr','--learning_rate',default=0.0002,type=float,help="Learning rate used to optimize model parameters.Supported type 'float'.Default set to 0.0002")
 parser.add_argument('-beta1','--beta1',default=0.99,type=float,help="""Beta1 used by Adam,Nadam and Adamax optimizer for beta1. 
 Beta1 used by SGD and Nesterov as momentum parameter.Beta1 used by RMSprop as alpha parameter.Supported type 'float'.Default set to 0.99""")
 parser.add_argument('-beta2','--beta2',default=0.999,type=float,help="Beta2 used by Adam,Nadam and Adamax optimizer.Supported type 'float'.Default set to 0.999")
 parser.add_argument('-eps','--epsilon',default=10**-8,type=float,help="Epsilon used by optimizers.Supported type 'float'.Default set to 10**-8")
-parser.add_argument('-w_d','--weight_decay',default=0.001,type=float,help="L2 regularisation parameter or decay parameter used during training.Supported type 'float'.Default set to 0.001")
+parser.add_argument('-w_d','--weight_decay',default=0.005,type=float,help="L2 regularisation parameter or decay parameter used during training.Supported type 'float'.Default set to 0.005")
 parser.add_argument('-hl','--num_of_hidden_layers',default=3,type=int,help="""Number of hidden layers in the encoder-decoder network.Both encoder and decoder models take 
 the same number of hidden layers to prevent 'bottleneck' during passing of hidden states..Supported type 'int'.Default set to 3""")
 parser.add_argument('-sz','--hidden_size',default=256,type=int,help="Size of the hidden layer for both encoder & decoder networks.Supported type 'int'.Default set to 256.")
