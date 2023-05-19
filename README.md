@@ -39,6 +39,7 @@ ii) Encoder Network:
  * train.py: (Tamil dataset)
 
   i) Python script to train encoder-decoder seq2seq model with training data and test the model on the test dataset from the terminal/command prompt.
+  ii) Imports from data_loader_vocab_builder.py, encoder_decoder.py and main.py
   ii) Commandline arguments are parsed using "argparse" module.
   iii) Type: python train.py --help in the terminal to get info about the commandline arguments. The default values of the arguments are set to the best configuration for the optimizer and model obtained from sweep configuration.
   
