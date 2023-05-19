@@ -45,7 +45,7 @@ ii) Encoder Network:
   
   iii) Commandline arguments are parsed using "argparse" module.
   
-  iv) Type: python train.py --help in the terminal to get info about the commandline arguments. The default values of the arguments are set to the best configuration for the optimizer and model obtained from sweep configuration.
+  iv) Type: python train.py --help in the terminal to get info about the commandline arguments. The default values of the arguments are set to the best configuration for the optimizer and model(attention mechanism) obtained from the sweep experiments.
   
 
   
