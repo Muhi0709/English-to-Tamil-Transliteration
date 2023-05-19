@@ -1,1 +1,1 @@
-for running train.py, add aksharantar_sampled folder to the working directory of the script.
+for running train.py, add aksharantar_sampled folder(dataset),main.py,encoder_decoder and data_loader_vocab_builder.py to the working directory of the script.
