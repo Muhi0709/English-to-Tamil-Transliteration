@@ -1,8 +1,13 @@
--for running train.py, add aksharantar_sampled folder(dataset),main.py,encoder_decoder and data_loader_vocab_builder.py to the working directory of the script.
+-for running train.py, ensure aksharantar_sampled folder(dataset),main_def.py,encoder_decoder and data_loader_vocab_builder.py are in the working directory of the script.
 
 - hyperparameter_tuning.py and best_model_prediction_table_attention_matrix.py can be run as Kaggle notebooks.
 
-- for running best_model_prediction_table_attention_matrix.py in kaggle(use "import notebook" option in kaggle,ensure editor style to "notebook"), add "data_loader_vocab_builder.py","encoder_decoder.py" and "main.py" as utility scripts and "aksharantar_sampled" dataset and saved models from "best_models" folder in this repo as data sources (added to '\kaggle\input\' by default). The resulting output files,"predictions_vanilla.csv" and "predictions_attention,csv" will get saved in '\kaggle\working' by default. 
+- for running best_model_prediction_table_attention_matrix.py in kaggle(use "import notebook" option in kaggle,ensure editor style to "notebook"), add "data_loader_vocab_builder.py","encoder_decoder.py" and "main_def.py" as utility scripts and "aksharantar_sampled" dataset with the name "aksharantar" and saved models from "best_models" folder in this repo as data source with the name "models" (use add data option in kaggle). The resulting output files,"predictions_vanilla.csv" and "predictions_attention,csv" will get saved in '\kaggle\working' by default. 
 
-- for running hyperparameter_tuning.py in kaggle(use "import notebook" option in kaggle,ensure editor style to "notebook"), add "data_loader_vocab_builder.py","encoder_decoder.py" and "main.py" as utility scripts and "aksharantar_sampled" dataset as data source(added to '\kaggle\input\' by default). 
+- for running hyperparameter_tuning.py in kaggle(use "import notebook" option in kaggle,ensure editor style to "notebook"), add "data_loader_vocab_builder.py","encoder_decoder.py" and "main_def.py" as utility scripts and  "aksharantar_sampled" dataset with the name "aksharantar" as data source with the name "models" (use add data option in kaggle).
+
+-Before adding "data_loader_vocab_builder.py","encoder_decoder.py" and "main_def.py" as utility script, these must be saved and commited as seperated Kaggle notebooks. Instruction for doing this is giving below:
+i) Import "data_loader_vocab_builder.py" in a new Kaggle notebook, rename notebook as "data_loader_vocab_builder"(to prevent importing issues), click on "set as utility script" option and save & commit the notebook.
+ii) Import "encoder_decoder.py" in a new Kaggle notebook, rename notebook as "encoder_decoder"(to prevent importing issues), click on "set as utility script" option and save & commit the notebook.
+iii) Import "main_def.py" in a new Kaggle notebook, rename notebook as "main_def"(to prevent importing issues), add "aksharantar_sampled" dataset with the name "aksharantar" as data source using add data option in kaggle, add "data_loader_vocab_builder.py" as utility script and then save & commit the notebook.
 
