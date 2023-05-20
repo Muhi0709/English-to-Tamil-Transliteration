@@ -27,7 +27,7 @@ ii) Encoder Network:
      * (Input character/prev predicted character) + encoder hidden states * attn weights)->Linear Layer-> combined input->Embedding->Dropout->cell(rnn/gru/lstm)->linear layer->Predicted character. 
      * Attention weights are obtained using Watt(linear layer),Uatt(linear layer) and Vatt(trainable vector for dot product)=> $Vatt.(Watt(h_j) +Uatt(s_t-1) $
  
-* main.py:
+* main_def.py:
 
  i) Contains the definitions of training() function(network training:forward,backward with early stopping) and compute_loss_accuracy() function (for calculating loss,accuracy for training data,validation data and test data).
  
