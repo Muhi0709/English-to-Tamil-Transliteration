@@ -121,7 +121,7 @@ class decoder(nn.Module):   # decoder network definition (without attention mech
         else:
             print("Not a valid cell type")
         
-        self.lin = nn.Linear(hidden_size,dict_size) #linear layer to convert hidden states to output (vector of dimension equal to devanagari script dict size)
+        self.lin = nn.Linear(hidden_size,dict_size) #linear layer to convert hidden states to output (vector of dimension equal to tamil script dict size)
         # N X L X hidden size -> N X L X dict_size (like a classification problem)
         # Note no softmax, as nn.CrossEntropy is used(directly takes logits)
 
