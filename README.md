@@ -31,7 +31,7 @@ ii) Encoder Network:
 
  i) Contains the definitions of training() function(network training:forward,backward with early stopping) and compute_loss_accuracy() function (for calculating loss,accuracy for training data,validation data and test data).
  
- * hyperarameter_tuning.py:
+ * hyperparameter_tuning.py:
 
   i) wandb sweep experiments: hyperparameter_tuning1,hyperparameter_tuning2 and hyperparameter_tuning3
   
