@@ -25,7 +25,7 @@ def hyperparametric_tuning():
                         "beta_1":0.99,"beta_2":0.999,"epsilon":10**-8,"wei_decay":0.005,
                         "early_stopping":True,"patience":4,"wandb_log":True,"teacher_forcing":0.0,"attn_mech":False,"dropout":0.2}
     
-    run=wandb.init(project="cs6910_assignment3",config=default_config)
+    run=wandb.init(project="assignment3_cs6910",config=default_config)
 
     config=wandb.config
     #setting up wandb run with name as given
