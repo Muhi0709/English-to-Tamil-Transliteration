@@ -8,7 +8,7 @@ wandb.login()
 device = torch.device("cuda" if torch.cuda.is_available() else "cpu") #check for cuda
 torch.manual_seed(42) #global random seed
 
-(latin_script,latin_script_idx2word,dev_script_word2idx,dev_script_idx2word),(
+(latin_script,latin_script_idx2word,tam_script_word2idx,tam_script_idx2word),(
     train_data,max_length_x,max_length_y),(val_data,max_length_val_x,max_length_val_y),(
     test_data,max_length_test_x,max_length_test_y)=load_data()   #load data and script dictionaries
 
@@ -20,7 +20,7 @@ def hyperparametric_tuning():
     #default model and training config
     default_config={"cell_type":"rnn","hidden_size":256,"enc_embedding_size":256,"enc_dict_size": len(latin_script_idx2word),
                        "num_hl":2,"bidirectional":False,"dec_embedding_size":256,
-                       "dec_dict_size": len(dev_script_word2idx),"loss_func":"cross_entropy","optimizer":"Adam",
+                       "dec_dict_size": len(tam_script_word2idx),"loss_func":"cross_entropy","optimizer":"Adam",
                         "max_epoch":1,"batch_size":256,"learning_rate":0.002,
                         "beta_1":0.99,"beta_2":0.999,"epsilon":10**-8,"wei_decay":0.005,
                         "early_stopping":True,"patience":4,"wandb_log":True,"teacher_forcing":0.0,"attn_mech":False,"dropout":0.2}
@@ -61,7 +61,7 @@ def hyperparametric_tuning():
     dec.to(device=device)
     
     #call training from main script for training the encoder-decoder network with parameters from config
-    training(enc,dec,dev_script_word2idx,train_data,val_data,max_length_x,max_length_val_x,loss_func=config.loss_func,
+    training(enc,dec,tam_script_word2idx,train_data,val_data,max_length_x,max_length_val_x,loss_func=config.loss_func,
              optimizer= config.optimizer,
              max_epoch= config.max_epoch,batch_size= config.batch_size,learning_rate= config.learning_rate,
              beta_1= config.beta_1,beta_2= config.beta_2,epsilon= config.epsilon,
@@ -119,7 +119,7 @@ sweep_configuration_2={
         "goal": "maximize",
         "name": "val_accuracy"
     },
-    "run_cap":85,
+    "run_cap":90,
     "parameters":{
         "cell_type": {"values": [ "lstm"] },
 
