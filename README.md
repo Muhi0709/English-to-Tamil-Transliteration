@@ -60,6 +60,7 @@ ii) Encoder Network:
   iv) Type: python train.py --help in the terminal to get info about the commandline arguments. The default values of the arguments are set to the best configuration for the optimizer and model(attention mechanism) obtained from the sweep experiments.
   
 * Output Folders:
+
 i) predictions_vanilla - contains the prediction_vanilla.csv file obtained from the best model without attention mechanism.
 
 ii) predictions_attention - contains the prediction_attention.csv file obtained from the best model with attention mechanism.
