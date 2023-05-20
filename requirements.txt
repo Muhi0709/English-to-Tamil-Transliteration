@@ -2,7 +2,7 @@
 
 - hyperparameter_tuning.py and best_model_prediction_table_attention_matrix.py can be run as Kaggle notebooks.
 
-- for running best_model_prediction_table_attention_matrix.py in kaggle, add "data_loader_vocab_builder.py","encoder_decoder.py" and "main.py" as utility scripts and "aksharantar_sampled" dataset and saved models from "best_models" folder in this repo as data sources (added to '\kaggle\input\' by default). The resulting output files,"predictions_vanilla.csv" and "predictions_attention,csv" will get saved in '\kaggle\working' by default. 
+- for running best_model_prediction_table_attention_matrix.py in kaggle(use "import notebook" option in kaggle,ensure editor style to "notebook"), add "data_loader_vocab_builder.py","encoder_decoder.py" and "main.py" as utility scripts and "aksharantar_sampled" dataset and saved models from "best_models" folder in this repo as data sources (added to '\kaggle\input\' by default). The resulting output files,"predictions_vanilla.csv" and "predictions_attention,csv" will get saved in '\kaggle\working' by default. 
 
-- for running hyperparameter_tuning.py in kaggle, add "data_loader_vocab_builder.py","encoder_decoder.py" and "main.py" as utility scripts and "aksharantar_sampled" dataset as data source(added to '\kaggle\input\' by default). 
+- for running hyperparameter_tuning.py in kaggle(use "import notebook" option in kaggle,ensure editor style to "notebook"), add "data_loader_vocab_builder.py","encoder_decoder.py" and "main.py" as utility scripts and "aksharantar_sampled" dataset as data source(added to '\kaggle\input\' by default). 
 
