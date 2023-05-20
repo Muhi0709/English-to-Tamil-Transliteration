@@ -2,7 +2,7 @@
 
 * data_loader_vocab_builder.py : 
 
-i)The python script loads the aksharantar tamil dataset,builds the character dictionary(python dictionary)for both latin and devanagari script) and converts the characters into torch tensor with character indices(index-> character mapping is done using the built dictionaries).
+i)The python script loads the aksharantar tamil dataset,builds the character dictionary(python dictionary)for both latin and tamil script) and converts the characters into torch tensor with character indices(index-> character mapping is done using the built dictionaries).
 
 ii) Returns the built character2idx and idx2character dictionaries and the torch tensors: train_data(training data),val_data(validation data) and test_data(testing data)
 
