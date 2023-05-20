@@ -1,6 +1,8 @@
 #script for training and testing model from commandline argument
 
 import argparse
+import torch
+
 device = torch.device("cuda" if torch.cuda.is_available() else "cpu") #check for cuda
 torch.manual_seed(42) #global random seed
 #define argsparse arguments necessary for 'training' and 'compute_loss_accuracy'functions from main.py
