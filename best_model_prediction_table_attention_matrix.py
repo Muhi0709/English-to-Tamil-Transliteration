@@ -12,7 +12,7 @@ device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
 torch.manual_seed(42)
 
 #loading test data and vocab dictionary
-(latin_script_word2idx,latin_script_idx2word,dev_script_word2idx,dev_script_idx2word),(
+(latin_script_word2idx,latin_script_idx2word,tam_script_word2idx,tam_script_idx2word),(
     _,_,_),(_,_,_),(
     test_data,max_length_test_x,max_length_test_y)=load_data()
 
@@ -22,7 +22,7 @@ test_data=test_data.to(device=device)
 best_enc_no_attn= encoder(hidden_size=256,num_of_hidden_layers=4,dict_size=len(latin_script_idx2word),bidirectional=False,dropout=0.3,
                    embedding_size=256,cell_type="lstm")
 best_enc_no_attn.load_state_dict(torch.load("/kaggle/input/best-no-attn/enc_ep_30_bs_64_hlnum_4_hlsize_256_cell_lstm_bidir_False_eemsize_256_demsize_128_tf_0.6drop_0.3_lr_0.002_attn_False.pth"))
-best_dec_no_attn = decoder(hidden_size=256,num_of_hidden_layers=4,cell_type="lstm",dict_size=len(dev_script_idx2word),dropout=0.3,
+best_dec_no_attn = decoder(hidden_size=256,num_of_hidden_layers=4,cell_type="lstm",dict_size=len(tam_script_idx2word),dropout=0.3,
                                    embedding_size=128)
 best_dec_no_attn.load_state_dict(torch.load("/kaggle/input/best-no-attn/dec_ep_30_bs_64_hlnum_4_hlsize_256_cell_lstm_bidir_False_eemsize_256_demsize_128_tf_0.6drop_0.3_lr_0.002_attn_False.pth"))
 
@@ -31,7 +31,7 @@ best_dec_no_attn.load_state_dict(torch.load("/kaggle/input/best-no-attn/dec_ep_3
 best_enc_attn= encoder(hidden_size=256,num_of_hidden_layers=3,dict_size=len(latin_script_idx2word),bidirectional=True,dropout=0.3,
                    embedding_size=256,cell_type="lstm")
 best_enc_attn.load_state_dict(torch.load("/kaggle/input/best-attn/enc_ep_30_bs_32_hlnum_3_hlsize_256_cell_lstm_bidir_True_eemsize_256_demsize_128_tf_0.6drop_0.3_lr_0.0002_attn_True.pth"))
-best_dec_attn = attention_decoder(hidden_size=256,num_of_hidden_layers=3,cell_type="lstm",dict_size=len(dev_script_idx2word),dropout=0.3,
+best_dec_attn = attention_decoder(hidden_size=256,num_of_hidden_layers=3,cell_type="lstm",dict_size=len(tam_script_idx2word),dropout=0.3,
                                    embedding_size=128,encoder_hidden_size=256)
 best_dec_attn.load_state_dict(torch.load("/kaggle/input/best-attn/dec_ep_30_bs_32_hlnum_3_hlsize_256_cell_lstm_bidir_True_eemsize_256_demsize_128_tf_0.6drop_0.3_lr_0.0002_attn_True.pth"))
 
@@ -49,44 +49,44 @@ best_enc_attn.eval()
 best_dec_attn.eval()
 
 
-def predictions(enc,dec,test_data,max_length_test_x,lat_dict_idx2word,lat_dict_word2idx,dev_dict_idx2word,
-                dev_dict_word2idx,ignore_accuracy = False,
+def predictions(enc,dec,test_data,max_length_test_x,lat_dict_idx2word,lat_dict_word2idx,tam_dict_idx2word,
+                tam_dict_word2idx,ignore_accuracy = False,
                 wandb_log_table= False):
     
     N=len(test_data)
-    predicted_words_list=[]   #predicted(dev)
-    actual_words_list=[]    #ground truth (dev)
+    predicted_words_list=[]   #predicted(tam)
+    actual_words_list=[]    #ground truth (tam)
     input_words_list=[]    #latin
 
     if not ignore_accuracy:  #compute accuracy and the predicted word indices
         acc,predicted_words = compute_loss_accuracy(test_data[:,:max_length_test_x],test_data[:,max_length_test_x:-2],enc,dec,
-                                                         test_data[:,-2],test_data[:,-1],dev_dict_word2idx,testing=True)
+                                                         test_data[:,-2],test_data[:,-1],tam_dict_word2idx,testing=True)
     else:
         _,predicted_words = compute_loss_accuracy(test_data[:,:max_length_test_x],test_data[:,max_length_test_x:-2],enc,dec,
-                                                    test_data[:,-2],test_data[:,-1],dev_dict_word2idx,testing=True)
+                                                    test_data[:,-2],test_data[:,-1],tam_dict_word2idx,testing=True)
     
     actual_words = test_data[:,max_length_test_x:-2]
     input_words = test_data[:,:max_length_test_x]
 
-    for i in range(N):      #convert predicted indices(y) to  dev characters
+    for i in range(N):      #convert predicted indices(y) to  tam characters
         a=""
         for idx in predicted_words[i]:
-            if idx.item() == dev_dict_word2idx["<eow>"]:
+            if idx.item() == tam_dict_word2idx["<eow>"]:
                 break
-            a+=dev_dict_idx2word[idx.item()]
+            a+=tam_dict_idx2word[idx.item()]
         predicted_words_list.append(a)
 
-    for i in range(N):      #convert ground truth indices(y) to  dev characters
+    for i in range(N):      #convert ground truth indices(y) to  tam characters
         a=""
         for idx in actual_words[i]:
-            if idx.item()== dev_dict_word2idx["<sow>"]:
+            if idx.item()== tam_dict_word2idx["<sow>"]:
                 continue
-            elif idx.item() == dev_dict_word2idx["<eow>"]:
+            elif idx.item() == tam_dict_word2idx["<eow>"]:
                 break
-            a+=dev_dict_idx2word[idx.item()]
+            a+=tam_dict_idx2word[idx.item()]
         actual_words_list.append(a)
     
-    for i in range(N):     #convert input indices(x) to  dev characters
+    for i in range(N):     #convert input indices(x) to  tam characters
         a=""
         for idx in input_words[i]:
             if idx.item() == lat_dict_word2idx["<eow>"]:
@@ -94,7 +94,7 @@ def predictions(enc,dec,test_data,max_length_test_x,lat_dict_idx2word,lat_dict_w
             a+=lat_dict_idx2word[idx.item()]
         input_words_list.append(a)
         
-    heading=np.array(["Input(Latin script)","Ground Truth(Dev script)","Prediction(Dev script)"])
+    heading=np.array(["Input(Latin script)","Ground Truth(Tam script)","Prediction(Tam script)"])
     result = np.vstack((np.array(input_words_list),np.array(actual_words_list),np.array(predicted_words_list))).T
     result=np.vstack((heading,result))
     # save the predictions as csv file
@@ -118,7 +118,7 @@ def predictions(enc,dec,test_data,max_length_test_x,lat_dict_idx2word,lat_dict_w
         for k in range(2 if not dec.attn_mech else 1):
             correct_prediction = np.array(actual_words_list)[selected_words if k==0 else selected_words1]==np.array(predicted_words_list)[selected_words if k==0 else selected_words1]
             fig = go.Figure(data=[go.Table(
-                header=dict(values= ["S.No","Input(Latin script)","Ground Truth(Dev script)","Prediction(Dev script)"],
+                header=dict(values= ["S.No","Input(Latin script)","Ground Truth(Tam script)","Prediction(Tam script)"],
                             align='left'),
                 cells=dict(values=[list(range(1,len(selected_words if k==0 else selected_words1)+1)), 
                                    list(np.array(input_words_list)[selected_words if k==0 else selected_words1]),list(np.array(actual_words_list)[selected_words if k==0 else selected_words1]),
@@ -134,7 +134,7 @@ def predictions(enc,dec,test_data,max_length_test_x,lat_dict_idx2word,lat_dict_w
     return predicted_words_list if ignore_accuracy else (predicted_words_list,acc)
 
 
-def plot_heat_map(fig,data,x,y,row,col):
+def plot_heat_map(fig,data,x,y,row,col,test_id):
     duplicate_prevention={0:"*",1:"@",2:"#",3:"$",4:"&"} #to prevent clubbing of heatmap columns or rows base on duplicate labels
     count=dict()
     count1=dict()
@@ -151,15 +151,15 @@ def plot_heat_map(fig,data,x,y,row,col):
             count1[y[i]]+=1
             y[i]=duplicate_prevention[count1[y[i]]]+y[i]
 
-    data=torch.round(data,decimals=2) #rounding of the weights to 2 decimal places
+
     fig.add_trace(go.Heatmap(z=data, x=x, y=y, coloraxis = "coloraxis"), row=row, col=col) #add a subplot for the attention matrix for the given datapoint
-    fig.update_xaxes(title=dict(text="Input(Latin Script)", font=dict(size=14)), row=row, col=col, side='top')
-    fig.update_yaxes(title=dict(text="Predicted(Devanagiri Script)", font=dict(size=14)), row=row, col=col, side='left',autorange="reversed")
+    fig.update_xaxes(title=dict(text="Predicted(Test id:{})".format(test_id), font=dict(size=9)), row=row, col=col, side='top')
+    fig.update_yaxes(title=dict(text="Input(Latin Script)", font=dict(size=9)), row=row, col=col, side='left',autorange="reversed")
     
     return fig
 
 
-def attention_heatmap(enc,dec,test_data,max_length_test_x,dev_script_word2idx,dev_script_idx2word,
+def attention_heatmap(enc,dec,test_data,max_length_test_x,tam_script_word2idx,tam_script_idx2word,
                       latin_script_idx2word,sample_size=9):
     N=len(test_data)
     permute = torch.randperm(N)
@@ -183,15 +183,15 @@ def attention_heatmap(enc,dec,test_data,max_length_test_x,dev_script_word2idx,de
             attn_mask=torch.ones(test_data_xseq_lens[i])
             attn_mask=attn_mask.to(device=device)
 
-            input= torch.tensor([[dev_script_word2idx["<sow>"]]])
+            input= torch.tensor([[tam_script_word2idx["<sow>"]]])
             input=input.to(device=device)
             for j in range(30):   #decoder forward pass upto a maximum seq len of 30
                 probabilities,a = dec(input,decoder_h0,decoder_c0,encoder_hidden,attn_mask) #decoder forward pass
                 _,predicted = torch.max(probabilities,dim=2)
                 attention_weight_matrix[:,j] = dec.attn_weights[:test_data_xseq_lens[i]] #update the attention weight matrix(attn weights are an attriv=bute of the attention_decoder class )
-                prediction_list.append(dev_script_idx2word[predicted[0,0].item()])
+                prediction_list.append(tam_script_idx2word[predicted[0,0].item()])
 
-                if predicted.item() == dev_script_word2idx["<eow>"]: #stop prediction once <eow> is predicted
+                if predicted.item() == tam_script_word2idx["<eow>"]: #stop prediction once <eow> is predicted
                     break
                 input = predicted
                 if dec.cell_type=="lstm":
@@ -203,7 +203,7 @@ def attention_heatmap(enc,dec,test_data,max_length_test_x,dev_script_word2idx,de
             attention_weight_matrix = attention_weight_matrix[:,:j+1]  
             x_list = [latin_script_idx2word[idx.item()] for idx in test_data_x[i,:test_data_xseq_lens[i]]] #input sequence(x)
             
-            fig=plot_heat_map(fig,attention_weight_matrix,prediction_list,x_list,row=i//3 +1,col=i%3 +1) #plotting the heatmap 
+            fig=plot_heat_map(fig,attention_weight_matrix,prediction_list,x_list,row=i//3 +1,col=i%3 +1,test_id=permute[i]+1) #plotting the heatmap 
         fig.update_layout(coloraxis = {'colorscale':'viridis'}, height=1000, width=1000) 
         wandb.log({"Attention Heatmap Grid": fig})
         wandb.finish()
@@ -211,9 +211,9 @@ def attention_heatmap(enc,dec,test_data,max_length_test_x,dev_script_word2idx,de
 
 with torch.no_grad(): #calling predictions() for csv file, test acc calc and logging the prediction table 
     _,test_acc1=predictions(best_enc_no_attn,best_dec_no_attn,test_data,max_length_test_x,latin_script_idx2word,latin_script_word2idx,
-                           dev_script_idx2word,dev_script_word2idx,ignore_accuracy=False,wandb_log_table=True)
+                           tam_script_idx2word,tam_script_word2idx,ignore_accuracy=False,wandb_log_table=True)
     _,test_acc2=predictions(best_enc_attn,best_dec_attn,test_data,max_length_test_x,latin_script_idx2word,latin_script_word2idx,
-                           dev_script_idx2word,dev_script_word2idx,ignore_accuracy=False,wandb_log_table=True)
+                           tam_script_idx2word,tam_script_word2idx,ignore_accuracy=False,wandb_log_table=True)
 print("-"*200)
 print("=>Test Accuracy(no_atten_mechanism): {}".format(test_acc1))
 print("-"*200)
@@ -221,4 +221,4 @@ print("=>Test Accuracy(atten_mechanism): {}".format(test_acc2))
 print("-"*200)
 
 #invoking the attention_heatmap() to log the 3x3 attention heatmap grid
-attention_heatmap(best_enc_attn,best_dec_attn,test_data,max_length_test_x,dev_script_word2idx,dev_script_idx2word,latin_script_idx2word)
+attention_heatmap(best_enc_attn,best_dec_attn,test_data,max_length_test_x,tam_script_word2idx,tam_script_idx2word,latin_script_idx2word)
