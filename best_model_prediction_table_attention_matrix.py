@@ -21,19 +21,19 @@ test_data=test_data.to(device=device)
 #loading the best models obtained from the sweep (without attention mech)-sweeps run in kaggle and the models saved in kaggle
 best_enc_no_attn= encoder(hidden_size=256,num_of_hidden_layers=4,dict_size=len(latin_script_idx2word),bidirectional=False,dropout=0.3,
                    embedding_size=256,cell_type="lstm")
-best_enc_no_attn.load_state_dict(torch.load("/kaggle/input/best-no-attn/enc_ep_30_bs_64_hlnum_4_hlsize_256_cell_lstm_bidir_False_eemsize_256_demsize_128_tf_0.6drop_0.3_lr_0.002_attn_False.pth"))
+best_enc_no_attn.load_state_dict(torch.load("/kaggle/input/enc_ep_30_bs_64_hlnum_4_hlsize_256_cell_lstm_bidir_False_eemsize_256_demsize_128_tf_0.6drop_0.3_lr_0.002_attn_False.pth"))
 best_dec_no_attn = decoder(hidden_size=256,num_of_hidden_layers=4,cell_type="lstm",dict_size=len(tam_script_idx2word),dropout=0.3,
                                    embedding_size=128)
-best_dec_no_attn.load_state_dict(torch.load("/kaggle/input/best-no-attn/dec_ep_30_bs_64_hlnum_4_hlsize_256_cell_lstm_bidir_False_eemsize_256_demsize_128_tf_0.6drop_0.3_lr_0.002_attn_False.pth"))
+best_dec_no_attn.load_state_dict(torch.load("/kaggle/input/dec_ep_30_bs_64_hlnum_4_hlsize_256_cell_lstm_bidir_False_eemsize_256_demsize_128_tf_0.6drop_0.3_lr_0.002_attn_False.pth"))
 
 #loading the best models obtained from the sweep (with attention mech)-sweeps run in kaggle and the models saved in kaggle
 
 best_enc_attn= encoder(hidden_size=256,num_of_hidden_layers=3,dict_size=len(latin_script_idx2word),bidirectional=True,dropout=0.3,
                    embedding_size=256,cell_type="lstm")
-best_enc_attn.load_state_dict(torch.load("/kaggle/input/best-attn/enc_ep_30_bs_32_hlnum_3_hlsize_256_cell_lstm_bidir_True_eemsize_256_demsize_128_tf_0.6drop_0.3_lr_0.0002_attn_True.pth"))
+best_enc_attn.load_state_dict(torch.load("/kaggle/input/enc_ep_30_bs_32_hlnum_3_hlsize_256_cell_lstm_bidir_True_eemsize_256_demsize_128_tf_0.6drop_0.3_lr_0.0002_attn_True.pth"))
 best_dec_attn = attention_decoder(hidden_size=256,num_of_hidden_layers=3,cell_type="lstm",dict_size=len(tam_script_idx2word),dropout=0.3,
                                    embedding_size=128,encoder_hidden_size=256)
-best_dec_attn.load_state_dict(torch.load("/kaggle/input/best-attn/dec_ep_30_bs_32_hlnum_3_hlsize_256_cell_lstm_bidir_True_eemsize_256_demsize_128_tf_0.6drop_0.3_lr_0.0002_attn_True.pth"))
+best_dec_attn.load_state_dict(torch.load("/kaggle/input/dec_ep_30_bs_32_hlnum_3_hlsize_256_cell_lstm_bidir_True_eemsize_256_demsize_128_tf_0.6drop_0.3_lr_0.0002_attn_True.pth"))
 
 
 #loading to cuda if available
