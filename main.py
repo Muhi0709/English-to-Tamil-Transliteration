@@ -10,15 +10,14 @@ import wandb
 device = torch.device("cuda" if torch.cuda.is_available() else "cpu") #check for cuda
 torch.manual_seed(42)      #global random seed
 
-(latin_script,latin_script_idx2word,dev_script_word2idx,dev_script_idx2word),(_,_,_),(_,_,_),(_,_,_)=load_data()  
+(latin_script,latin_script_idx2word,tam_script_word2idx,tam_script_idx2word),(_,_,_),(_,_,_),(_,_,_)=load_data()  
 #load the dictionaries using data_loader_vocab_builder_script
-
 
 
 # set the defau;ts for 'training" function definitions 
 default_config={"cell_type":"rnn","hidden_size":256,"enc_embedding_size":256,"enc_dict_size": len(latin_script_idx2word),
                        "num_hl":4,"bidirectional":True,"dec_embedding_size":128,
-                       "dec_dict_size": len(dev_script_word2idx),"loss_func":"cross_entropy","optimizer":"Adam",
+                       "dec_dict_size": len(tam_script_word2idx),"loss_func":"cross_entropy","optimizer":"Adam",
                         "max_epoch":30,"batch_size":128,"learning_rate":0.002,
                         "beta_1":0.99,"beta_2":0.999,"epsilon":10**-8,"wei_decay":0.005,
                         "early_stopping":True,"patience":4,"wandb_log":False,"teacher_forcing":0.2,"attn_mech":True,"dropout":0.5}
@@ -62,7 +61,7 @@ def encoder_forward_prop(enc,x,seq_lens_x):        #forward propagation for the 
     return decoder_h0,decoder_c0,encoder_hidden       # output h_n,c_n(last sequence  hidden & cell state ), last layer  hidden states (all L)
 
     
-def decoder_forward_prop(dec,x,y,seq_lens_x,seq_lens_y,dev_script_word2idx,criterion,decoder_h0,decoder_c0,encoder_hidden,
+def decoder_forward_prop(dec,x,y,seq_lens_x,seq_lens_y,tam_script_word2idx,criterion,decoder_h0,decoder_c0,encoder_hidden,
                          teacher_forcing_bool=False,testing=False): #forward propagation for the decoder model
     
     loss=torch.tensor(0.0).to(device=device)
@@ -91,7 +90,7 @@ def decoder_forward_prop(dec,x,y,seq_lens_x,seq_lens_y,dev_script_word2idx,crite
     else:        #when teacher forcing not enabled, predicted words at previous time step are fed as input to next
         #processing happens one time step after another
         # this block runs for both cases:if decoder uses atten or not 
-        input= torch.tensor([[dev_script_word2idx["<sow>"]]]*len(x)).to(device=device)
+        input= torch.tensor([[tam_script_word2idx["<sow>"]]]*len(x)).to(device=device)
         for i in range(len_y):
             if not dec.attn_mech:
                 probabilities,a= dec(input,decoder_h0,decoder_c0)
@@ -115,7 +114,7 @@ def decoder_forward_prop(dec,x,y,seq_lens_x,seq_lens_y,dev_script_word2idx,crite
 
 
 #loss accuracy calculating function, used during training & validation phase. Can be invoked for testing/inference. Does batch wise computation
-def compute_loss_accuracy(x,y,enc1,dec1,seq_len_x,seq_len_y,dev_script_word2idx,testing=False,
+def compute_loss_accuracy(x,y,enc1,dec1,seq_len_x,seq_len_y,tam_script_word2idx,testing=False,
                           crit=nn.CrossEntropyLoss(ignore_index=0,reduction="sum")): 
     N=len(x)
     predicted_y=torch.zeros(y.shape[0],y.shape[1]-1 if not testing else 30).to(device=device) #predicted words(indices) tensor for the given batch
@@ -140,7 +139,7 @@ def compute_loss_accuracy(x,y,enc1,dec1,seq_len_x,seq_len_y,dev_script_word2idx,
                 #do forward propagation
             decoder_h0,decoder_c0,encoder_hidden = encoder_forward_prop(enc1,x[n:n+batch_size],seq_len_x[n:n+batch_size])
             l,predicted_batch =decoder_forward_prop(dec1,x[n:n+batch_size],y[n:n+batch_size],seq_len_x[n:n+batch_size],
-                                                        seq_len_y[n:n+batch_size],dev_script_word2idx,crit,decoder_h0,decoder_c0,
+                                                        seq_len_y[n:n+batch_size],tam_script_word2idx,crit,decoder_h0,decoder_c0,
                                                         encoder_hidden,teacher_forcing_bool=False,testing=testing) 
                 #update loss and predicted characters(indices)
             predicted_y[n:n+batch_size,:(max(seq_len_y[n:n+batch_size])-1) if not testing else 30] = predicted_batch
@@ -158,7 +157,7 @@ def compute_loss_accuracy(x,y,enc1,dec1,seq_len_x,seq_len_y,dev_script_word2idx,
 
 
 # training func: trains the encoder-decoder network, with deault parameters taken from dfault_config dictionary
-def training(enc,dec,dev_script_word2idx,train_data,val_data,max_length_x,max_length_val_x,
+def training(enc,dec,tam_script_word2idx,train_data,val_data,max_length_x,max_length_val_x,
              loss_func=default_config["loss_func"],
              optimizer=default_config["optimizer"],
              max_epoch=default_config["max_epoch"],batch_size=default_config["batch_size"],learning_rate=default_config["learning_rate"],
@@ -237,7 +236,7 @@ def training(enc,dec,dev_script_word2idx,train_data,val_data,max_length_x,max_le
 
             #forward prop
             decoder_h0,decoder_c0,encoder_hidden = encoder_forward_prop(enc,train_x,seq_lens_train_x)
-            loss,_= decoder_forward_prop(dec,train_x,train_y,seq_lens_train_x,seq_lens_train_y,dev_script_word2idx,criterion,
+            loss,_= decoder_forward_prop(dec,train_x,train_y,seq_lens_train_x,seq_lens_train_y,tam_script_word2idx,criterion,
                                         decoder_h0,decoder_c0, encoder_hidden,epoch<= (teacher_forcing* max_epoch),testing=False)
 
             #backward prop
@@ -250,10 +249,10 @@ def training(enc,dec,dev_script_word2idx,train_data,val_data,max_length_x,max_le
         
         #compute train_loss,val_loss,train_acc,val_acc after each epoch
         train_loss,train_acc,_ = compute_loss_accuracy(train_data[:,:max_length_x],train_data[:,max_length_x:-2],enc,dec,
-                                                       train_data[:,-2],train_data[:,-1],dev_script_word2idx,testing=False,
+                                                       train_data[:,-2],train_data[:,-1],tam_script_word2idx,testing=False,
                                                        crit=criterion)
         val_loss,val_acc,_ = compute_loss_accuracy(val_data[:,:max_length_val_x],val_data[:,max_length_val_x:-2],enc,dec,
-                                                 val_data[:,-2],val_data[:,-1],dev_script_word2idx,testing=False,
+                                                 val_data[:,-2],val_data[:,-1],tam_script_word2idx,testing=False,
                                                  crit=criterion)
         
         val_acc_hist.append(val_acc)
