@@ -4,8 +4,8 @@ import argparse
 #define argsparse arguments necessary for 'training' and 'compute_loss_accuracy'functions from main.py
 parser=argparse.ArgumentParser(prog="Training & Testing NN model",description="""Training and Testing the encoder-decoder network on the 
 given aksharantar dataset.All parse arguments have default values and are set to the best configuration obtained from wandb sweep experiments""")
-parser.add_argument('-wp','--wandb_project',default="assignment3_cs6910",
-                    help="Project name used to track experiments.Default set to 'assignment3_cs6910'.")
+parser.add_argument('-wp','--wandb_project',default="cs6910_assignment3",
+                    help="Project name used to track experiments.Default set to 'cs6910_assignment3'.")
 parser.add_argument('-we','--wandb_entity',default="ep19b005",
                     help="Wandb entity used to track experiments in the W&B dashboard.Default set to 'ep19b005'.")
 parser.add_argument('-e','--max_epoch',default=30,type=int,help="Number of epochs to train the network.Supported type 'int'.Default set to 30")
@@ -53,7 +53,7 @@ from main import training,compute_loss_accuracy
 
 #loading the Tamil dataset
 print("loading Tamil dataset...")
-(latin_script,latin_script_idx2word,dev_script_word2idx,dev_script_idx2word),(
+(latin_script,latin_script_idx2word,tam_script_word2idx,tam_script_idx2word),(
     train_data,max_length_x,max_length_y),(val_data,max_length_val_x,max_length_val_y),(
     test_data,max_length_test_x,max_length_test_y)=load_data()
 print("dataset_loaded!!!")
@@ -86,7 +86,7 @@ if args.wandb_log: #if wandb_log argument True, the training run is logged to wa
         "teacher_forcing":args.teacher_forcing,
         "bidirectional":args.bidirectional,
         "enc_dict_size": len(latin_script),
-        "dec_dict_size": len(dev_script_word2idx),
+        "dec_dict_size": len(tam_script_word2idx),
         }
     run=wandb.init(project=args.wandb_project,entity=args.wandb_entity,config=configuration)
     config=wandb.config
@@ -109,13 +109,13 @@ enc.to(device=device)
 #instanstiate dec model (attn /no attn) with commandline parameters 
 if not args.attn_mech:
     dec = decoder(args.hidden_size,
-    num_of_hidden_layers= args.num_of_hidden_layers,dict_size= len(dev_script_word2idx),
+    num_of_hidden_layers= args.num_of_hidden_layers,dict_size= len(tam_script_word2idx),
     embedding_size= args.dec_embedd_size,
     cell_type= args.cell_type,dropout=args.dropout)
     
 else:
     dec = attention_decoder(hidden_size= args.hidden_size,
-                            num_of_hidden_layers=args.num_of_hidden_layers,dict_size=len(dev_script_idx2word),
+                            num_of_hidden_layers=args.num_of_hidden_layers,dict_size=len(tam_script_idx2word),
                             embedding_size= args.dec_embed_size,
                             cell_type=args.cell_type,
                             encoder_hidden_size=args.hidden_size,
@@ -124,7 +124,7 @@ dec.to(device=device)
 
 #train the model
 print("training started....")
-training(enc=enc,dec=dec,dev_script_word2idx=dev_script_word2idx,train_data=train_data,val_data=val_data,max_length_x=max_length_x,
+training(enc=enc,dec=dec,tam_script_word2idx=tam_script_word2idx,train_data=train_data,val_data=val_data,max_length_x=max_length_x,
          max_length_val_x=max_length_val_x,loss_func=args.loss,optimizer=args.optimizer,max_epoch=args.max_epoch,batch_size=args.batch_size,
          learning_rate=args.learning_rate,beta_1=args.beta1,beta_2=args.beta2,epsilon=args.epsilon,wei_decay=args.weight_decay,
          early_stopping=args.early_stopping,patience=args.patience,wandb_log=args.wandb_log,teacher_forcing=args.teacher_forcing)
@@ -135,7 +135,7 @@ else:
     pass
 #call compute loss accuracy on the trained model for testing inference
 acc,_=compute_loss_accuracy(x=test_data[:,:max_length_test_x],y=test_data[:,max_length_test_x:-2],enc1=enc,dec1=dec,seq_len_x=test_data[:,-2],
-                      seq_len_y=test_data[:,-1],dev_script_word2idx=dev_script_word2idx,testing=True)
+                      seq_len_y=test_data[:,-1],tamil_script_word2idx=tam_script_word2idx,testing=True)
 
 #printing test accuracy
 print("=>Test Accuracy: {}".format(acc))
