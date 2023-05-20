@@ -3,6 +3,8 @@ import torch.nn as nn
 from torch import optim
 import torch.nn.functional as F
 import numpy as np
+import os
+
 
 device = torch.device("cuda" if torch.cuda.is_available() else "cpu")   #setting device to cuda if it is available
 
@@ -65,12 +67,17 @@ def words_to_indices(x,y,latin_script,tam_script_word2idx):
         seq_lens_x).unsqueeze(1),torch.tensor(seq_lens_y).unsqueeze(1)),dim=1),max_length_x,max_length_y
 
 def load_data():   #load train,valid,test_pairs
-    train_pairs=np.genfromtxt("aksharantar_sampled/tam/tam_train.csv",
+    flag =None
+    if os.environ.get('KAGGLE_KERNEL_RUN_TYPE', ''):
+        flag="/kaggle/input/aksharantar/"
+    else:
+        flag=""
+    train_pairs=np.genfromtxt(flag+"aksharantar_sampled/tam/tam_train.csv",
                           delimiter=",",encoding="utf-8",dtype=str)
     
-    val_pairs=np.genfromtxt("aksharantar_sampled/tam/tam_valid.csv",
+    val_pairs=np.genfromtxt(flag+"aksharantar_sampled/tam/tam_valid.csv",      #flag variable to ensure smooth running on Kaggle
                           delimiter=",",encoding="utf-8",dtype=str)
-    test_pairs=np.genfromtxt("aksharantar_sampled/tam/tam_test.csv",
+    test_pairs=np.genfromtxt(flag+"aksharantar_sampled/tam/tam_test.csv",
                           delimiter=",",encoding="utf-8",dtype=str)
     latin_script_word2idx={"<pad>":0,"<un>":1,"<eow>":2}
     latin_script_idx2word={0:"<pad>",1:"<un>",2:"<eow>"}

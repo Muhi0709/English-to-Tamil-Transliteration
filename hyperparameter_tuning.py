@@ -2,7 +2,7 @@ import torch
 from encoder_decoder import encoder,decoder,attention_decoder
 from data_loader_vocab_builder import *
 import wandb
-from main import training
+from main_def import training
 
 wandb.login()
 device = torch.device("cuda" if torch.cuda.is_available() else "cpu") #check for cuda

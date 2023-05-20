@@ -1,6 +1,8 @@
 #script for training and testing model from commandline argument
 
 import argparse
+device = torch.device("cuda" if torch.cuda.is_available() else "cpu") #check for cuda
+torch.manual_seed(42) #global random seed
 #define argsparse arguments necessary for 'training' and 'compute_loss_accuracy'functions from main.py
 parser=argparse.ArgumentParser(prog="Training & Testing NN model",description="""Training and Testing the encoder-decoder network on the 
 given aksharantar dataset.All parse arguments have default values and are set to the best configuration obtained from wandb sweep experiments""")
@@ -49,7 +51,7 @@ args=parser.parse_args()
 
 from encoder_decoder import encoder,decoder,attention_decoder
 from data_loader_vocab_builder import *
-from main import training,compute_loss_accuracy
+from main_def import training,compute_loss_accuracy
 
 #loading the Tamil dataset
 print("loading Tamil dataset...")
