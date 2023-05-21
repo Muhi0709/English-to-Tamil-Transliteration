@@ -9,7 +9,7 @@ torch.manual_seed(42) #global random seed
 parser=argparse.ArgumentParser(prog="Training & Testing NN model",description="""Training and Testing the encoder-decoder network on the 
 given aksharantar dataset.All parse arguments have default values and are set to the best configuration obtained from wandb sweep experiments""")
 parser.add_argument('-wp','--wandb_project',default="assignment3_cs6910",
-                    help="Project name used to track experiments.Default set to 'cs6910_assignment3'.")
+                    help="Project name used to track experiments.Default set to 'assignment3_cs6910'.")
 parser.add_argument('-we','--wandb_entity',default="ep19b005",
                     help="Wandb entity used to track experiments in the W&B dashboard.Default set to 'ep19b005'.")
 parser.add_argument('-e','--max_epoch',default=30,type=int,help="Number of epochs to train the network.Supported type 'int'.Default set to 30")
