@@ -139,7 +139,7 @@ else:
     pass
 #call compute loss accuracy on the trained model for testing inference
 acc,_=compute_loss_accuracy(x=test_data[:,:max_length_test_x],y=test_data[:,max_length_test_x:-2],enc1=enc,dec1=dec,seq_len_x=test_data[:,-2],
-                      seq_len_y=test_data[:,-1],tamil_script_word2idx=tam_script_word2idx,testing=True)
+                      seq_len_y=test_data[:,-1],tam_script_word2idx=tam_script_word2idx,testing=True)
 
 #printing test accuracy
 print("=>Test Accuracy: {}".format(acc))
