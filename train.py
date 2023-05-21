@@ -34,7 +34,7 @@ parser.add_argument('-enc_em','--enc_embed_size',type=int,default=256,help="""Th
 parser.add_argument('-dec_em','--dec_embed_size',type=int,default=128,help="""The embedding size used by decoder network.Supported type 'int'.Default set to 128.""")
 parser.add_argument('-drop','--dropout',type=float,default=0.3,help="""The probability of switch-off in the dropout layers used in encoder and decoder networks.
 Supported type 'float' from 0 to 1.Default set to 0.3""")
-parser.add_argument('-n0_bi','--no_bidirectional',dest="bidirectional",action="store_false",help="""Boolean flag (action='store_false') with a default True value. Implements a bidirectional encoder network by default.
+parser.add_argument('-no_bi','--no_bidirectional',dest="bidirectional",action="store_false",help="""Boolean flag (action='store_false') with a default True value. Implements a bidirectional encoder network by default.
 When flagged/called(becomes false),encoder network/model is no longer has bi-directional information/capability""")
 parser.add_argument('-no_es','--no_early_stopping',dest="early_stopping",action="store_false",help="""Boolean flag (action='store_false') with a default True value.No early stopping during training by tracking validation 
 losses when called/flagged(becomes False).By default, early stopping is set to True. """)
